@@ -1,935 +1,519 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manu Nagendra Nalla | Backend Engineer</title>
+  <meta name="description" content="Backend engineer building Go services, Kafka event pipelines and large-scale data migrations. Creator of CP Krovis, a Kafka tool used by 40+ developers.">
+  <meta name="theme-color" content="#0b1020">
+  <meta property="og:title" content="Manu Nagendra Nalla | Backend Engineer">
+  <meta property="og:description" content="Go, Kafka and large-scale data migrations.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f8fa; --surface: #ffffff; --text: #1b2333; --muted: #5b667a;
+      --line: #e3e7ee; --accent: #0a7f6f; --accent-soft: #0a7f6f1a;
+      --a2: #6d4aff; --a3: #d6246e; --a4: #b45f00; --blob: .16;
+      --grad: linear-gradient(90deg, var(--accent), var(--a2), var(--a3));
+      --shadow: 0 1px 2px rgb(16 24 40 / .05), 0 8px 24px rgb(16 24 40 / .06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0b1020; --surface: #121933; --text: #e6e9f2; --muted: #9aa5bd;
+        --line: #232c4a; --accent: #5eead4; --accent-soft: #5eead41a;
+        --a2: #8b7bff; --a3: #ff6fb1; --a4: #fbbf24; --blob: .3;
+        --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 8px 24px rgb(0 0 0 / .25);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0b1020; --surface: #121933; --text: #e6e9f2; --muted: #9aa5bd;
+      --line: #232c4a; --accent: #5eead4; --accent-soft: #5eead41a;
+        --a2: #8b7bff; --a3: #ff6fb1; --a4: #fbbf24; --blob: .3;
+      --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 8px 24px rgb(0 0 0 / .25);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+    body {
+      background: var(--bg); color: var(--text);
+      font: 16px/1.65 Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .skip { position: absolute; left: -999px; top: 8px; background: var(--accent); color: var(--bg); padding: 8px 14px; border-radius: 8px; z-index: 10; }
+    .skip:focus { left: 8px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
-  <title>Manu's Portfolio</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+    .layout { max-width: 1120px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 340px 1fr; gap: 72px; }
+    header.side { position: sticky; top: 0; align-self: start; height: 100vh; padding: 88px 0 48px; display: flex; flex-direction: column; justify-content: space-between; }
+    .avatar { width: 104px; height: 104px; border-radius: 50%; padding: 3px; background: var(--grad); margin-bottom: 22px; }
+    .avatar img { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--bg); }
+    .eyebrow { font: 500 13px/1 "JetBrains Mono", monospace; color: var(--accent); letter-spacing: .04em; margin-bottom: 18px; }
+    h1 { font-size: 44px; line-height: 1.08; letter-spacing: -.03em; font-weight: 700; }
+    .role { margin-top: 12px; font-size: 19px; font-weight: 500; }
+    .tagline { margin-top: 14px; color: var(--muted); max-width: 300px; }
+    nav ul { list-style: none; margin-top: 48px; }
+    nav a { display: flex; align-items: center; gap: 14px; padding: 8px 0; font: 500 12px/1 "JetBrains Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); transition: color .2s; }
+    nav a::before { content: ""; width: 28px; height: 1px; background: currentColor; transition: width .25s; }
+    nav a:hover, nav a.active { color: var(--text); }
+    nav a:hover::before, nav a.active::before { width: 64px; }
+    .tools { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .tools a, .tools button { color: var(--muted); display: inline-flex; transition: color .2s, transform .2s; background: none; border: 0; cursor: pointer; font: inherit; }
+    .tools a:hover, .tools button:hover { color: var(--accent); transform: translateY(-2px); }
+    .tools svg { width: 22px; height: 22px; fill: currentColor; }
+    .copy { position: relative; }
+    .copy::after { content: attr(data-tip); position: absolute; left: 50%; bottom: 140%; transform: translateX(-50%) translateY(4px); background: var(--text); color: var(--bg); font: 500 11px/1 "JetBrains Mono", monospace; padding: 6px 9px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
+    .copy[data-tip]:hover::after, .copy.tip::after { opacity: 1; transform: translateX(-50%); }
 
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    main { padding: 88px 0 96px; min-width: 0; }
+    #contact { min-height: 70vh; }
+    section { margin-bottom: 96px; }
+    h2 { font: 600 12px/1 "JetBrains Mono", monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; }
+    .about p { color: var(--muted); margin-bottom: 14px; max-width: 620px; }
+    .about p strong { color: var(--text); font-weight: 600; }
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 28px 0 0; }
+    .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); }
+    .stat b { display: block; font-size: 28px; letter-spacing: -.02em; line-height: 1.1; }
+    .stat span { font-size: 13px; color: var(--muted); }
 
-    <!-- Vendor CSS Files -->
+    .job, .proj { position: relative; display: grid; grid-template-columns: 130px 1fr; gap: 20px; padding: 22px; margin: 0 -22px 10px; border-radius: 16px; transition: background .25s; }
+    .job:hover, .proj:hover { background: var(--surface); box-shadow: var(--shadow); }
+    .when { font: 500 12px/1.7 "JetBrains Mono", monospace; letter-spacing: .04em; color: var(--muted); text-transform: uppercase; padding-top: 4px; }
+    .job h3, .proj h3 { font-size: 17px; font-weight: 600; line-height: 1.35; }
+    .job h3 small { color: var(--muted); font-weight: 500; font-size: 15px; }
+    .job ul { list-style: none; margin-top: 10px; }
+    .job li { position: relative; padding-left: 18px; margin-bottom: 8px; color: var(--muted); font-size: 15px; }
+    .job li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); }
+    .job li b, .proj p b { color: var(--text); font-weight: 600; }
+    .proj p { color: var(--muted); font-size: 15px; margin-top: 6px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; list-style: none; }
+    .job .tags li { padding-left: 11px; margin-bottom: 0; font-size: 12px; }
+    .job .tags li::before { content: none; }
+    .tags li { font: 500 12px/1 "JetBrains Mono", monospace; color: var(--c, var(--accent)); background: color-mix(in srgb, var(--c, var(--accent)) 14%, transparent); padding: 7px 11px; border-radius: 999px; cursor: pointer; transition: transform .15s, background .2s, color .2s; }
+    .tags li:hover { transform: translateY(-2px); }
+    .tags li.on { background: var(--c, var(--accent)); color: var(--bg); }
+    .more { display: inline-block; margin-top: 18px; font-weight: 600; border-bottom: 1px solid var(--accent); }
+    .more:hover { color: var(--accent); }
 
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .skill { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+    .skill h3 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+    .skill .tags { margin-top: 0; }
 
-<!--  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">-->
-<!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    .edu { display: grid; gap: 14px; }
+    .edu div { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+    .edu h3 { font-size: 16px; }
+    .edu p { color: var(--muted); font-size: 14px; }
 
-  <script src="https://kit.fontawesome.com/75ccbee135.js" crossorigin="anonymous"></script>
+    .cta { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 40px; text-align: center; box-shadow: var(--shadow); }
+    .cta h3 { font-size: 28px; letter-spacing: -.02em; }
+    .cta p { color: var(--muted); margin: 10px auto 24px; max-width: 460px; }
+    .btn { display: inline-block; background: var(--accent); color: var(--bg); font-weight: 600; padding: 12px 24px; border-radius: 999px; transition: transform .2s; }
+    .btn:hover { transform: translateY(-2px); }
+    footer { color: var(--muted); font-size: 13px; margin-top: 56px; }
 
-  <script src="https://code.iconify.design/iconify-icon/2.0.0/iconify-icon.min.js"></script>
 
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
+    /* CP Krovis screenshot */
+    .shot { display: block; margin-top: 18px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: transform .2s, border-color .2s; }
+    .shot:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .shot img { display: block; width: 100%; height: auto; }
+    .proj .caption { margin-top: 8px; }
 
-  <!-- =======================================================
-  * Template Name: Personal - v4.7.0
-  * Template URL: https://bootstrapmade.com/personal-free-resume-bootstrap-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
-  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.png">
+    /* case study */
+    .case { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; box-shadow: var(--shadow); }
+    .case h3 { font-size: 22px; letter-spacing: -.02em; line-height: 1.25; }
+    .case .kicker { font: 500 12px/1 "JetBrains Mono", monospace; color: var(--a3); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
+    .case h4 { margin: 22px 0 6px; font-size: 14px; color: var(--accent); }
+    .case p, .case li { color: var(--muted); font-size: 15px; }
+    .case ul { padding-left: 18px; }
+    .case li { margin-bottom: 5px; }
+    .case li b, .case p b { color: var(--text); font-weight: 600; }
+    .flow { width: 100%; height: auto; margin: 8px 0 4px; }
+    .flow rect { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+    .flow .hl rect { stroke: var(--accent); }
+    .flow text { fill: var(--text); font: 500 12.5px Inter, system-ui, sans-serif; text-anchor: middle; }
+    .flow text.sub { fill: var(--muted); font-size: 11px; font-weight: 400; }
+    .flow path { stroke: var(--muted); stroke-width: 1.5; fill: none; marker-end: url(#arr); }
+    .flow marker path { fill: var(--muted); stroke: none; marker-end: none; }
+    .caption { font-size: 12.5px; color: var(--muted); }
+
+    /* colour + motion layer */
+    body::before, body::after { content: ""; position: fixed; z-index: -1; width: 46vmax; height: 46vmax; border-radius: 50%; filter: blur(90px); opacity: var(--blob); pointer-events: none; animation: drift 22s ease-in-out infinite alternate; }
+    body::before { top: -18vmax; left: -12vmax; background: var(--a2); }
+    body::after { bottom: -20vmax; right: -14vmax; background: var(--a3); animation-delay: -9s; }
+    @keyframes drift { to { transform: translate(8vmax, 6vmax) scale(1.15); } }
+    #progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; background: var(--grad); transform: scaleX(0); transform-origin: 0 50%; z-index: 20; }
+    h1 { background: var(--grad); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; }
+    h2 { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .stat:nth-child(1) { --c: var(--accent); } .stat:nth-child(2) { --c: var(--a2); }
+    .stat:nth-child(3) { --c: var(--a3); } .stat:nth-child(4) { --c: var(--a4); }
+    .stat b { color: var(--c); }
+    .stat, .skill, .job, .proj { --mx: 50%; --my: 50%; }
+    .stat, .skill { transition: border-color .2s; }
+    .stat:hover, .skill:hover { border-color: var(--c, var(--accent)); }
+    .job::before, .proj::before, .stat::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(260px circle at var(--mx) var(--my), color-mix(in srgb, var(--c, var(--a2)) 16%, transparent), transparent 70%); opacity: 0; transition: opacity .25s; pointer-events: none; }
+    .job:hover::before, .proj:hover::before, .stat:hover::before { opacity: 1; }
+    .stat { position: relative; }
+    .skill:nth-child(5n+1) { --c: var(--accent); } .skill:nth-child(5n+2) { --c: var(--a2); }
+    .skill:nth-child(5n+3) { --c: var(--a3); } .skill:nth-child(5n+4) { --c: var(--a4); }
+    .skill:nth-child(5n) { --c: var(--accent); }
+    .skill h3 { color: var(--c); }
+    .tags li:nth-child(4n+2) { --c: var(--a2); } .tags li:nth-child(4n+3) { --c: var(--a3); } .tags li:nth-child(4n) { --c: var(--a4); }
+    .hint { font-size: 13px; color: var(--muted); margin: -12px 0 18px; }
+    .hint button { all: unset; cursor: pointer; color: var(--a3); border-bottom: 1px solid currentColor; }
+    .hint button[hidden] { display: none; }
+    .hint button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .job, .proj { transition: background .25s, box-shadow .25s, opacity .3s; }
+    body.filtering .job:not(.hit), body.filtering .proj:not(.hit) { opacity: .28; }
+    .job li::before { color: var(--a2); }
+    .btn { background: var(--grad); background-size: 140% auto; color: #fff; }
+    .btn:hover { background-position: 100% 0; }
+    .copy:hover { color: var(--a3); }
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s, transform .6s; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before, body::after { animation: none; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; gap: 0; }
+      header.side { position: static; height: auto; padding: 56px 0 8px; gap: 32px; }
+      nav { display: none; }
+      h1 { font-size: 36px; }
+      main { padding-top: 40px; }
+      .job, .proj { grid-template-columns: 1fr; gap: 6px; margin: 0 0 10px; padding: 18px; }
+      .case { padding: 20px; }
+      .cta { padding: 28px 20px; }
+    }
+  </style>
 </head>
-
 <body>
-
-  <!-- ======= Header ======= -->
-  <header id="header">
-    <div class="container">
-
-      <h1><a href="index.html">Manu Nagendra Nalla</a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html" class="mr-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a> -->
-      <h2>I'm a passionate <span>Software Developer</span></h2>
-
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link active" href="#header">Home</a></li>
-          <li><a class="nav-link" href="#about">About</a></li>
-          <li><a class="nav-link" href="#resume">Resume</a></li>
-<!--          <li><a class="nav-link" href="#services">Services</a></li>-->
-<!--          <li><a class="nav-link" href="#portfolio">Portfolio</a></li>-->
-          <li><a class="nav-link" href="#contact">Contact</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-      <div class="social-links">
-        <a href="https://www.linkedin.com/in/manu-nagendra/" class="linkedin"><i class="bi bi-linkedin"></i></a>
-        <a href=mailto:“manu.nagendra@gmail.com”><iconify-icon icon="ic:outline-email"></iconify-icon></a>
+  <div id="progress" aria-hidden="true"></div>
+  <a class="skip" href="#about">Skip to content</a>
+  <div class="layout">
+    <header class="side">
+      <div>
+        <div class="avatar"><img src="assets/img/headshot.jpg" width="480" height="480" alt="Portrait of Manu Nagendra Nalla smiling, wearing glasses and a light grey hoodie"></div>
+        <p class="eyebrow">&gt; hello, world</p>
+        <h1>Manu Nagendra Nalla</h1>
+        <p class="role">Backend Engineer</p>
+        <p class="tagline">I build Go services, Kafka pipelines and data migrations that move billions of records without losing any.</p>
+        <nav aria-label="Sections">
+          <ul>
+            <li><a href="#about" class="active">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#case-study">Case study</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
       </div>
+      <div class="tools">
+        <a href="https://github.com/manunag" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+        <a href="https://www.linkedin.com/in/manu-nagendra/" aria-label="LinkedIn" rel="noopener"><svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg></a>
+        <button class="copy" id="copy" type="button" aria-label="Copy email address" data-email="manu.nagendra@gmail.com" data-tip="copy email"><svg viewBox="0 0 24 24"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h13A2.5 2.5 0 0 1 21 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 18.5v-13Zm2.2.7 6.8 5.1 6.8-5.1a.5.5 0 0 0-.3-.2H5.5a.5.5 0 0 0-.3.2Zm13.8 2.4-6.4 4.8a1 1 0 0 1-1.2 0L5 8.6v9.9c0 .28.22.5.5.5h13a.5.5 0 0 0 .5-.5V8.6Z"/></svg></button>
+        <button id="theme" type="button" aria-label="Toggle light and dark theme"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-5.4-5.4c0-1.81.89-3.42 2.26-4.4A9.1 9.1 0 0 0 12 3Z"/></svg></button>
+      </div>
+    </header>
 
-    </div>
-  </header><!-- End Header -->
-
-  <!-- ======= About Section ======= -->
-  <section id="about" class="about">
-
-    <!-- ======= About Me ======= -->
-    <div class="about-me container">
-
-      <div class="section-title">
+    <main>
+      <section id="about" class="about reveal">
         <h2>About</h2>
-<!--        <p>Learn more about me</p>-->
-      </div>
-
-      <div class="row">
-        <div class="col-lg-4" data-aos="fade-right">
-          <img src="assets/img/me.jpg" class="img-fluid" alt="" width="200" height="300">
+        <p>I'm a backend engineer at Kroger's Customer Platform, working in <strong>Go</strong>, <strong>Kafka</strong> and <strong>YugabyteDB</strong>. For the past two years I've been on the team that moved the platform's customer data off legacy systems, a job that ended with a production run of about <strong>1.22 billion records</strong>.</p>
+        <p>Outside the migration I built <strong>CP Krovis</strong>, a tool for exploring Kafka topics that started as a side project and is now used by more than 40 developers. I like work where correctness matters and the scale makes it hard: validation, reconciliation, dead-letter queues and failover.</p>
+        <p>I hold an MS in Computer Science from CSU Long Beach, and I started my career at ZopSmart, where I earned a double promotion to Senior SDE.</p>
+        <div class="stats">
+          <div class="stat"><b data-to="1.22" data-dec="2" data-suf="B">1.22B</b><span>records in the final production migration</span></div>
+          <div class="stat"><b data-to="99.99" data-dec="2" data-suf="%">99.99%</b><span>migration accuracy, deltas reconciled to zero</span></div>
+          <div class="stat"><b data-to="40" data-dec="0" data-suf="+">40+</b><span>developers using CP Krovis</span></div>
+          <div class="stat"><b data-to="14" data-dec="0" data-pre="~" data-suf="K">~14K</b><span>events/min after sync tuning, up from ~4K</span></div>
         </div>
-        <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-          <h3>Software Development Engineer</h3>
-          <p class="fst-italic">
-            A seasoned Software Developer with 3 years of IT Experience. My expertise lies in architecting and maintaining data synchronization applications using Kafka, Go, and YugabyteDB.
-          </p>
-          <div class="row">
-            <div class="col-lg-6">
-              <ul>
-                <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span>25 Oct 1997</span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>+1 (562)841-3604</span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span>Long Beach, California</span></li>
-              </ul>
-            </div>
-            <div class="col-lg-6">
+      </section>
 
-              <ul>
-                <li  ><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span id="age"></span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Masters in Computer Science</span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>manu.nagendra@gmail.com</span></li>
-              </ul>
-            </div>
+      <section id="experience" class="reveal">
+        <h2>Experience</h2>
+        <p class="hint">Tip: click any tech tag to highlight where I've used it. <button type="button" id="clear" hidden>Clear filter</button></p>
+
+        <article class="job">
+          <div class="when">May 2024 &ndash; Present</div>
+          <div>
+            <h3>Software Engineer II <small>&middot; Ascendum Solutions (client: Kroger)</small></h3>
+            <ul>
+              <li>Core engineer on the Customer Platform migration, from the 24Q2 run through close-out. Owned the validation, error-analysis and fix-script streams for the <b>final run of about 1.22B records across 12 entity types, at 99.99% accuracy</b>.</li>
+              <li>Designed a reusable <b>Go data-fix framework</b> that replaced one-off scripts, and built a Go generator of synthetic records that caught <b>15+ critical transformation bugs</b> before production.</li>
+              <li>Built a Failed Events API for about 915K DLQ messages a month, and an error-handling package that cut debugging time by about <b>73%</b> (2.5 hours to 40 minutes).</li>
+              <li>Tuned forward-sync consumption by load-testing worker counts against CPU, raising throughput from <b>4K to 14K events per minute (3.5x)</b>.</li>
+              <li>Built disaster recovery for eight Kafka consumers, and validated CP Search at about <b>2,995 GET requests per second (9.94 ms p95)</b> against a 150 ms SLA.</li>
+            </ul>
+            <ul class="tags"><li>Go</li><li>Kafka</li><li>YugabyteDB</li><li>Kubernetes</li><li>Dynatrace</li><li>Harness</li></ul>
           </div>
-          <p>
-            My current work experience includes orchestrating a team to streamline enterprise-wide customer data management and boost migration efficiency by 50%.
-          </p>
-          <script>
-            // Function to calculate age based on birthdate
-            function calculateAge(birthdate) {
-              var today = new Date();
-              var birthDate = new Date(birthdate);
-              var age = today.getFullYear() - birthDate.getFullYear();
-              var monthDiff = today.getMonth() - birthDate.getMonth();
-              if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-              }
-              return age;
-            }
+        </article>
 
-            // Update age on the web page
-            function updateAge() {
-              var birthdate = new Date('1997-10-25'); // Update with your birthdate
-              var age = calculateAge(birthdate);
-              document.getElementById('age').textContent = age;
-            }
+        <article class="job">
+          <div class="when">Apr 2022 &ndash; Dec 2022</div>
+          <div>
+            <h3>Senior Software Development Engineer <small>&middot; ZopSmart</small></h3>
+            <ul>
+              <li>Led a 10-member team replacing a legacy enterprise customer data system, raising migration efficiency by <b>50%</b>.</li>
+              <li>Promoted from SDE I to Senior SDE in a double promotion after two years, and mentored junior developers on Go.</li>
+            </ul>
+            <ul class="tags"><li>Go</li><li>Kafka</li><li>Team lead</li></ul>
+          </div>
+        </article>
 
-            updateAge();
-          </script>
-        </div>
-      </div>
+        <article class="job">
+          <div class="when">Mar 2020 &ndash; Mar 2022</div>
+          <div>
+            <h3>Software Development Engineer I <small>&middot; ZopSmart</small></h3>
+            <ul>
+              <li>Led an ETL-based migration project from inception to deployment; centralizing customer data saved an estimated <b>$2.3M a year</b>.</li>
+              <li>Raised real-time pipeline throughput by <b>60%</b> with goroutines and channels, and cut server load by <b>25%</b> with a Redis cache.</li>
+            </ul>
+            <ul class="tags"><li>Go</li><li>Redis</li><li>ETL</li><li>CI/CD</li></ul>
+          </div>
+        </article>
 
-    </div><!-- End About Me -->
+        <article class="job">
+          <div class="when">Nov 2019 &ndash; Mar 2020</div>
+          <div>
+            <h3>Application Development Associate <small>&middot; Accenture</small></h3>
+            <ul>
+              <li>Supported Pfizer's PL/SQL systems: debugged stored procedures and triggers and optimized code for performance.</li>
+            </ul>
+            <ul class="tags"><li>PL/SQL</li></ul>
+          </div>
+        </article>
 
-    <!-- ======= Counts ======= -->
-<!--    <div class="counts container">-->
+        <a class="more" href="Manu_Nagendra_Nalla_Resume.pdf">View full r&eacute;sum&eacute; (PDF)</a>
+      </section>
 
-<!--      <div class="row">-->
+      <section id="case-study" class="reveal">
+        <h2>Case study</h2>
+        <article class="case">
+          <p class="kicker">Data migration &middot; validation</p>
+          <h3>Turning about 200K unexplained mismatches into fix-ready categories</h3>
+          <h4>The problem</h4>
+          <p>After a production migration run, a reconciliation between the new platform and the legacy source flagged about <b>200K records</b> that disagreed. A flat list of that size can't be worked: nobody knew which differences shared a cause, who owned them, or which were safe to fix automatically.</p>
+          <h4>Approach</h4>
+          <ul>
+            <li>Pulled the same records from <b>three source systems</b> through small, separate fetchers, so every comparison used one record shape.</li>
+            <li>Built an analyzer that grouped each mismatch by cause, which gave a <b>14-category taxonomy</b>. Each category got a named owner and a decision: fix in data, fix in the transform, or accept.</li>
+            <li>Applied the fixable categories with an executor CLI that sends <b>JSON Merge Patch</b> updates, so each fix changes only the fields that were wrong.</li>
+            <li>Replaced one-off scripts with this reusable framework, and re-ran the analyzer after each fix to prove the category shrank.</li>
+          </ul>
+          <svg class="flow" viewBox="0 0 760 120" role="img" aria-label="Pipeline: three source systems feed fetchers, then an analyzer that produces categories, then an executor that applies patches, then a re-run check.">
+            <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z"/></marker></defs>
+            <g><rect x="4" y="30" width="110" height="60" rx="10"/><text x="59" y="57">3 source systems</text><text class="sub" x="59" y="75">legacy + new</text></g>
+            <path d="M114 60H146"/>
+            <g><rect x="148" y="30" width="110" height="60" rx="10"/><text x="203" y="57">Fetchers</text><text class="sub" x="203" y="75">one record shape</text></g>
+            <path d="M258 60H290"/>
+            <g class="hl"><rect x="292" y="30" width="110" height="60" rx="10"/><text x="347" y="57">Analyzer</text><text class="sub" x="347" y="75">group by cause</text></g>
+            <path d="M402 60H434"/>
+            <g class="hl"><rect x="436" y="30" width="110" height="60" rx="10"/><text x="491" y="57">14 categories</text><text class="sub" x="491" y="75">owner + decision</text></g>
+            <path d="M546 60H578"/>
+            <g><rect x="580" y="30" width="110" height="60" rx="10"/><text x="635" y="57">Executor</text><text class="sub" x="635" y="75">JSON Merge Patch</text></g>
+            <path d="M635 90V110H347V94" />
+          </svg>
+          <p class="caption">After each fix the analyzer runs again, so progress is measured by categories that shrink.</p>
+          <h4>Result</h4>
+          <p>The open-ended reconciliation became a short, owned list, and the same framework repaired mismatches in production. The final run of about <b>1.22 billion records</b> closed at <b>99.99% accuracy</b>, with every remaining difference on groups and alternate IDs reconciled to zero.</p>
+          <h4>What I'd do differently</h4>
+          <p>Categorize earlier. The taxonomy came after the reconciliation had already produced a flat list, and building the analyzer first would have saved manual triage. <a href="https://github.com/manunag/recon" rel="noopener" style="border-bottom:1px solid var(--accent)">recon</a> is a small public version of that idea.</p>
+        </article>
+      </section>
 
-<!--        <div class="col-lg-3 col-md-6">-->
-<!--          <div class="count-box">-->
-<!--            <i class="bi bi-emoji-smile"></i>-->
-<!--            <span data-purecounter-start="0" data-purecounter-end="2" data-purecounter-duration="1" class="purecounter"></span>-->
-<!--            <p>Happy Clients</p>-->
-<!--          </div>-->
-<!--        </div>-->
+      <section id="projects" class="reveal">
+        <h2>Projects</h2>
 
-<!--        <div class="col-lg-3 col-md-6 mt-5 mt-md-0">-->
-<!--          <div class="count-box">-->
-<!--            <i class="bi bi-journal-richtext"></i>-->
-<!--            <span data-purecounter-start="0" data-purecounter-end="1" data-purecounter-duration="1" class="purecounter"></span>-->
-<!--            <p>Projects</p>-->
-<!--          </div>-->
-<!--        </div>-->
+        <article class="proj">
+          <div class="when">2026</div>
+          <div>
+            <h3><a href="https://github.com/manunag/recon" rel="noopener">recon: reconcile two datasets into fixable categories</a></h3>
+            <p>A small open-source Go CLI that compares two JSONL datasets and groups every difference by cause, with sample IDs, JSON output and CI-friendly exit codes. Standard library only, with tests. Run on 2,000 synthetic records, it turns 179 differing records into five categories.</p>
+            <ul class="tags"><li>Go</li><li>CLI</li><li>Testing</li><li>Data validation</li></ul>
+          </div>
+        </article>
 
-<!--        <div class="col-lg-3 col-md-6 mt-5 mt-lg-0">-->
-<!--          <div class="count-box">-->
-<!--            <i class="bi bi-headset"></i>-->
-<!--            <span data-purecounter-start="0" data-purecounter-end="60" data-purecounter-duration="1" class="purecounter"></span>-->
-<!--            <p>Hours Of Support</p>-->
-<!--          </div>-->
-<!--        </div>-->
+        <article class="proj">
+          <div class="when">2026</div>
+          <div>
+            <h3>CP Krovis: a Kafka explorer for the whole team</h3>
+            <p>Started as a personal project and became a production app used by <b>40+ developers across 3 to 4 teams</b> to browse, search, stream and publish Kafka messages without CLI access. It also appears in the disaster recovery runbooks for finding offsets by timestamp during failover. <i>Internal to Kroger, so the source isn't public.</i></p>
+            <p>12 Kafka environments behind one interface, Avro schema-registry decoding, multi-partition time-range search, live WebSocket streaming and JSON diff. LDAP and JWT auth, 180 automated tests.</p>
+            <a class="shot" href="assets/img/krovis.png" target="_blank" rel="noopener">
+              <img src="assets/img/krovis.jpg" width="1600" height="953" loading="lazy" alt="CP Krovis explorer in the Stage environment: a topic list on the left, a search and time-range bar on top, and an expanded Kafka message shown as a JSON tree.">
+            </a>
+            <p class="caption">The CP Krovis explorer on a Stage environment. Click the image to see it full size.</p>
+            <ul class="tags"><li>Go</li><li>React</li><li>TypeScript</li><li>Kafka</li><li>WebSockets</li><li>GitHub Actions</li></ul>
+          </div>
+        </article>
 
-<!--        <div class="col-lg-3 col-md-6 mt-5 mt-lg-0">-->
-<!--          <div class="count-box">-->
-<!--            <i class="bi bi-award"></i>-->
-<!--            <span data-purecounter-start="0" data-purecounter-end="1" data-purecounter-duration="1" class="purecounter"></span>-->
-<!--            <p>Awards</p>-->
-<!--          </div>-->
-<!--        </div>-->
+        <article class="proj">
+          <div class="when">2022</div>
+          <div>
+            <h3>Data Loader</h3>
+            <p>A Go application that loads data between databases with configurable filters and transformations. Supports CSV, JSON, SQL, Postgres, Cassandra and Kafka.</p>
+            <ul class="tags"><li>Go</li><li>Postgres</li><li>Cassandra</li><li>Kafka</li></ul>
+          </div>
+        </article>
 
-<!--      </div>-->
+        <article class="proj">
+          <div class="when">2019</div>
+          <div>
+            <h3><a href="https://github.com/manunag/Password-Manager" rel="noopener">Password Manager</a></h3>
+            <p>A Python application for managing passwords securely, with a GUI and encrypted storage.</p>
+            <ul class="tags"><li>Python</li><li>Encryption</li><li>GUI</li></ul>
+          </div>
+        </article>
 
-<!--    </div>&lt;!&ndash; End Counts &ndash;&gt;-->
+        <a class="more" href="https://github.com/manunag?tab=repositories" rel="noopener">More on GitHub</a>
+      </section>
 
-    <!-- ======= Skills  ======= -->
-<!--    <div class="skills container">-->
-
-<!--      <div class="section-title">-->
-<!--        <h2>Skills</h2>-->
-<!--      </div>-->
-
-<!--      <div class="row skills-content">-->
-
-<!--        <div class="col-lg-6">-->
-
-<!--          <div class="progress">-->
-<!--            <span class="skill">AWS <i class="val">100%</i></span>-->
-<!--            <div class="progress-bar-wrap">-->
-<!--              <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          <div class="progress">-->
-<!--            <span class="skill">GCP <i class="val">90%</i></span>-->
-<!--            <div class="progress-bar-wrap">-->
-<!--              <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          <div class="progress">-->
-<!--            <span class="skill">Kubernetes <i class="val">75%</i></span>-->
-<!--            <div class="progress-bar-wrap">-->
-<!--              <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--        </div>-->
-
-<!--        <div class="col-lg-6">-->
-
-<!--          <div class="progress">-->
-<!--            <span class="skill">Terraform <i class="val">80%</i></span>-->
-<!--            <div class="progress-bar-wrap">-->
-<!--              <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          <div class="progress">-->
-<!--            <span class="skill">Jenkins <i class="val">90%</i></span>-->
-<!--            <div class="progress-bar-wrap">-->
-<!--              <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          <div class="progress">-->
-<!--            <span class="skill">Python <i class="val">55%</i></span>-->
-<!--            <div class="progress-bar-wrap">-->
-<!--              <div class="progress-bar" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--        </div>-->
-
-<!--      </div>-->
-
-<!--    </div>&lt;!&ndash; End Skills &ndash;&gt;-->
-
-
-    <div class="interests container">
-
-      <div class="section-title">
+      <section id="skills" class="reveal">
         <h2>Skills</h2>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-3 col-md-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:go" width="48" height="48">></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Go</h3>
-          </div>
+        <div class="skill-grid">
+          <div class="skill"><h3>Languages</h3><ul class="tags"><li>Go</li><li>Python</li><li>TypeScript</li><li>JavaScript</li><li>SQL</li><li>Java</li><li>Bash</li></ul></div>
+          <div class="skill"><h3>Backend and messaging</h3><ul class="tags"><li>Kafka</li><li>Avro</li><li>Schema Registry</li><li>REST</li><li>OpenAPI</li><li>WebSockets</li><li>Dead letter queues</li></ul></div>
+          <div class="skill"><h3>Databases</h3><ul class="tags"><li>YugabyteDB</li><li>PostgreSQL</li><li>Redis</li><li>MongoDB</li><li>Cassandra</li><li>PL/SQL</li></ul></div>
+          <div class="skill"><h3>Cloud and DevOps</h3><ul class="tags"><li>Kubernetes</li><li>Docker</li><li>Rancher</li><li>Harness</li><li>Spinnaker</li><li>GitHub Actions</li><li>Azure</li><li>AWS</li></ul></div>
+          <div class="skill"><h3>Observability and frontend</h3><ul class="tags"><li>Dynatrace</li><li>Grafana</li><li>React</li><li>Vite</li><li>Vitest</li></ul></div>
         </div>
-        <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:python" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Python</h3>
-          </div>
+      </section>
+
+      <section id="education" class="reveal">
+        <h2>Education</h2>
+        <div class="edu">
+          <div><h3>MS in Computer Science</h3><p>California State University, Long Beach &middot; 2023 &ndash; 2025</p></div>
+          <div><h3>BE in Computer Science</h3><p>Saveetha School of Engineering &middot; 2015 &ndash; 2019</p></div>
+          <div><h3>Claude Code in Action</h3><p>Anthropic certification &middot; February 2026 &middot; <a href="https://verify.skilljar.com/c/nfpjfjyaymza" rel="noopener" style="border-bottom:1px solid var(--accent)">verify</a></p></div>
         </div>
-        <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:c" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;C</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4 mt-lg-0">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:cplusplus" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;C++</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:java" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Java</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:yugabytedb" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;YugabyteDB</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:redis" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Redis</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:mongodb" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;MongoDB</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:postgresql" width="48" height="48"></iconify-icon>
+      </section>
 
-            <h3>&nbsp;&nbsp;&nbsp;PostgreSQL</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="logos:harness-icon" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Harness</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:rancher" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Rancher</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="logos:spinnaker" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Spinnaker</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="logos:dynatrace-icon" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Dynatrace</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:grafana" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Grafana</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:git" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Git</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:docker" width="48" height="48"></iconify-icon>
-            <h3>&nbsp;&nbsp;&nbsp;Docker</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <iconify-icon icon="devicon:kubernetes" width="48" height="48"></iconify-icon>
-           <h3>&nbsp;&nbsp;&nbsp;Kubernetes</h3>
-          </div>
-        </div>
-
-
-
-      </div>
-
-    </div><!-- End Interests -->
-
-
-
-    <!--    &lt;!&ndash; ======= Interests ======= &ndash;&gt;-->
-<!--    <div class="interests container">-->
-
-<!--      <div class="section-title">-->
-<!--        <h2>Interests</h2>-->
-<!--      </div>-->
-
-<!--      <div class="row">-->
-<!--        <div class="col-lg-3 col-md-4">-->
-<!--          <div class="icon-box">-->
-<!--            <i  class="fab fa-aws" style="color: #ffa76e;"></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;AWS</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4 mt-md-0">-->
-<!--          <div class="icon-box">-->
-<!--            <i class="iconify" data-icon="logos:google-cloud" style="color: yellow;" data-width="32" data-height="32";></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;GCP</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4 mt-md-0">-->
-<!--          <div class="icon-box">-->
-<!--            <i class="iconify" data-icon="logos:terraform-icon" data-width="32" data-height="32";></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;Terraform</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4 mt-lg-0">-->
-<!--          <div class="icon-box">-->
-<!--            <i class="iconify" data-icon="vscode-icons:file-type-jenkins" style="color: yellow;" data-width="32" data-height="32";></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;Jenkins</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <i class="fab fa-docker" style="color: #5578ff;"></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;Docker</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <i class="iconify" data-icon="mdi:kubernetes" data-width="32" data-height="32" style="color: #0a06e7;"></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;Kubernetes</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <i  class="iconify" data-icon="vscode-icons:file-type-serverless" data-width="32" data-height="32";></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;Serverless</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <i class="iconify" data-icon="carbon:cloud-monitoring" style="color: red;" data-width="32" data-height="32";></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;Monitoring</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <i class="iconify" data-icon="carbon:workflow-automation" style="color: rgb(110, 13, 119);" data-width="32" data-height="32";></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;Automation</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <i class="iconify" data-icon="carbon:cost" style="color: yellow;" data-width="32" data-height="32";></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;Cost Optimisation</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <i class="ri-base-station-line" style="color: #ff5828;"></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;CI/CD</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-lg-3 col-md-4 mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <i class="ri-fingerprint-line" style="color: #29cc61;"></i>-->
-<!--            <h3>&nbsp;&nbsp;&nbsp;Linux</h3>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
-<!--    </div>&lt;!&ndash; End Interests &ndash;&gt;-->
-
-    <!-- ======= Testimonials ======= -->
-<!--    <div class="testimonials container">-->
-
-<!--      <div class="section-title">-->
-<!--        <h2>Testimonials</h2>-->
-<!--      </div>-->
-
-<!--      <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">-->
-<!--        <div class="swiper-wrapper">-->
-
-<!--          <div class="swiper-slide">-->
-<!--            <div class="testimonial-item">-->
-<!--              <p>-->
-<!--                <i class="bx bxs-quote-alt-left quote-icon-left"></i>-->
-<!--                Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.-->
-<!--                <i class="bx bxs-quote-alt-right quote-icon-right"></i>-->
-<!--              </p>-->
-<!--              <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">-->
-<!--              <h3>Saul Goodman</h3>-->
-<!--              <h4>Ceo &amp; Founder</h4>-->
-<!--            </div>-->
-<!--          </div>&lt;!&ndash; End testimonial item &ndash;&gt;-->
-
-<!--          <div class="swiper-slide">-->
-<!--            <div class="testimonial-item">-->
-<!--              <p>-->
-<!--                <i class="bx bxs-quote-alt-left quote-icon-left"></i>-->
-<!--                Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.-->
-<!--                <i class="bx bxs-quote-alt-right quote-icon-right"></i>-->
-<!--              </p>-->
-<!--              <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">-->
-<!--              <h3>Sara Wilsson</h3>-->
-<!--              <h4>Designer</h4>-->
-<!--            </div>-->
-<!--          </div>&lt;!&ndash; End testimonial item &ndash;&gt;-->
-
-<!--          <div class="swiper-slide">-->
-<!--            <div class="testimonial-item">-->
-<!--              <p>-->
-<!--                <i class="bx bxs-quote-alt-left quote-icon-left"></i>-->
-<!--                Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.-->
-<!--                <i class="bx bxs-quote-alt-right quote-icon-right"></i>-->
-<!--              </p>-->
-<!--              <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">-->
-<!--              <h3>Jena Karlis</h3>-->
-<!--              <h4>Store Owner</h4>-->
-<!--            </div>-->
-<!--          </div>&lt;!&ndash; End testimonial item &ndash;&gt;-->
-
-<!--          <div class="swiper-slide">-->
-<!--            <div class="testimonial-item">-->
-<!--              <p>-->
-<!--                <i class="bx bxs-quote-alt-left quote-icon-left"></i>-->
-<!--                Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.-->
-<!--                <i class="bx bxs-quote-alt-right quote-icon-right"></i>-->
-<!--              </p>-->
-<!--              <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">-->
-<!--              <h3>Matt Brandon</h3>-->
-<!--              <h4>Freelancer</h4>-->
-<!--            </div>-->
-<!--          </div>&lt;!&ndash; End testimonial item &ndash;&gt;-->
-
-<!--          <div class="swiper-slide">-->
-<!--            <div class="testimonial-item">-->
-<!--              <p>-->
-<!--                <i class="bx bxs-quote-alt-left quote-icon-left"></i>-->
-<!--                Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.-->
-<!--                <i class="bx bxs-quote-alt-right quote-icon-right"></i>-->
-<!--              </p>-->
-<!--              <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">-->
-<!--              <h3>John Larson</h3>-->
-<!--              <h4>Entrepreneur</h4>-->
-<!--            </div>-->
-<!--          </div>&lt;!&ndash; End testimonial item &ndash;&gt;-->
-
-<!--        </div>-->
-<!--        <div class="swiper-pagination"></div>-->
-<!--      </div>-->
-
-<!--      <div class="owl-carousel testimonials-carousel">-->
-
-<!--      </div>-->
-
-<!--    </div>&lt;!&ndash; End Testimonials  &ndash;&gt;-->
-
-  </section><!-- End About Section -->
-
-  <!-- ======= Resume Section ======= -->
-  <section id="resume" class="resume">
-    <div class="container">
-
-      <div class="section-title">
-        <h2>Resume</h2>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">
-          <h3 class="resume-title">Summary</h3>
-          <div class="resume-item pb-0">
-            <h4>Manu Nagendra Nalla</h4>
-            <p><em>Experienced Software Development Engineer with a proven track record in building server-side
-              applications and leading teams. Proficient in Golang, SQL, and cloud infrastructure management, with a
-              focus on delivering efficient, scalable, and reliable backend services. Currently pursuing a master’s in
-              computer science at California State University Long Beach.</em></p>
-            <p>
-            <ul>
-              <li>Long Beach, California</li>
-              <li>+1 562-841-3604</li>
-              <li>manu.nagendra@gmail.com</li>
-            </ul>
-            </p>
-          </div>
-
-          <h3 class="resume-title">Education</h3>
-          <div class="resume-item">
-            <h4>Master of Science in Computer Science</h4>
-            <h5>2023 - Current</h5>
-            <p><em>California State University Long Beach</em></p>
-          </div>
-
-          <div class="resume-item">
-            <h4>Bachelor of Engineering in Computer Science</h4>
-            <h5>2015 - 2019</h5>
-            <p><em>Saveetha School of Engineering</em></p>
-          </div>
-
-<!--          <h3 class="resume-title">Certifications</h3>-->
-<!--          <div class="resume-item">-->
-<!--            <h4>AWS Certified Solutions Architect - Associate            </h4>-->
-<!--            <h5>Expires on April 20, 2024</h5>-->
-<!--            <p><em>Successfully passed the AWS Certified Solutions Architect - Associate exam.</em></p>-->
-<!--          </div>-->
-<!--          <div class="resume-item">-->
-<!--            <h4>Google Cloud Certified - Professional Cloud Architect </h4>-->
-<!--            <h5>Expires on May 28, 2023</h5>-->
-<!--            <p><em>Successfully passed the GCP Certified Professional Cloud Architect exam.</em></p>-->
-<!--          </div>-->
-        </div>
-        <div class="col-lg-6">
-          <h3 class="resume-title">Professional Experience</h3>
-          <div class="resume-item">
-            <h4>Senior Software Development Engineer</h4>
-            <h5>04/2020 - 12/2022</h5>
-            <p><em>Zopsmart (Kroger)</em></p>
-            <p>
-            <ul>
-              <li> Architected and maintained a data synchronization application utilizing Kafka, Go, and
-                YugabyteDB, enabling seamless data exchange between legacy and modern systems.</li>
-              <li> Orchestrated a ten-member team in replacing an outdated legacy system, streamlining
-                enterprise-wide customer data management, and increasing migration efficiency by 50%.</li>
-              <li> Engineered an application for transforming and loading over 450 million records from legacy to
-                modern systems, optimizing data migration efficiency.</li>
-              <li> Automated migration procedures with a custom script, simplifying file processing and data
-                loading tasks.</li>
-            </ul>
-            </p>
-          </div>
-          <div class="resume-item">
-            <h4>Software Development Engineer - 1</h4>
-            <h5>03/2020 - 03/2022</h5>
-            <p><em>ZopSmart (Kroger)</em></p>
-            <p>
-            <ul>
-              <li> Spearheaded an ETL logic-based Migration project, delivering an enterprise customer solution from
-                inception to deployment.</li>
-              <li> Led initiatives to develop projects from scratch, created proofs of concept, enhanced features,
-                established CI/CD pipelines, optimized deployment processes and implementing unit tests and integration
-                tests.</li>
-              <li> Centralized data management strategy resulted in saving $2.3M annually, ensuring accurate and
-                consistent customer data across systems.</li>
-                <li> Mitigated privacy risks by centralizing PII data, avoiding penalties of up to $7500 per CCPA incident.</li>
-              <li> Engaged in debugging, monitoring, and maintaining applications, databases, data migration,
-                and validation. Contributed to client interactions, documentation, code reviews, and testing. Assisted
-                in onboarding new team members and sprint planning.</li>
-              <li> Efficiently installed and maintained Logging cluster using Logstash, ElasticSearch, and Kibana as a
-                centralized solution for parsing logs from applications and Docker containers.</li>
-            </ul>
-            </p>
-          </div>
-
-          <div class="resume-item">
-            <h4>Software Development Intern</h4>
-            <h5>02/2019 - 03/2019</h5>
-            <p><em>Zoho</em></p>
-            <p>
-            <ul>
-              <li>Developed an Attendance Management System application using Struts 2.0, enhancing student attendance tracking.</li>
-            </ul>
-            </p>
-          </div>
-        </div>
-      </div>
-
-
-
-
-
-
-    </div>
-  </section><!-- End Resume Section -->
-
-  <!-- ======= Services Section ======= -->
-<!--  <section id="services" class="services">-->
-<!--    <div class="container">-->
-
-<!--      <div class="section-title">-->
-<!--        <h2>Services</h2>-->
-<!--        <p>My Services</p>-->
-<!--      </div>-->
-
-<!--      <div class="row">-->
-<!--        <div class="col-lg-4 col-md-6 d-flex align-items-stretch">-->
-<!--          <div class="icon-box">-->
-<!--            <div class="icon"><i class="bx bxl-dribbble"></i></div>-->
-<!--            <h4><a href="">Lorem Ipsum</a></h4>-->
-<!--            <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">-->
-<!--          <div class="icon-box">-->
-<!--            <div class="icon"><i class="bx bx-file"></i></div>-->
-<!--            <h4><a href="">Sed ut perspiciatis</a></h4>-->
-<!--            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">-->
-<!--          <div class="icon-box">-->
-<!--            <div class="icon"><i class="bx bx-tachometer"></i></div>-->
-<!--            <h4><a href="">Magni Dolores</a></h4>-->
-<!--            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <div class="icon"><i class="bx bx-world"></i></div>-->
-<!--            <h4><a href="">Nemo Enim</a></h4>-->
-<!--            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <div class="icon"><i class="bx bx-slideshow"></i></div>-->
-<!--            <h4><a href="">Dele cardo</a></h4>-->
-<!--            <p>Quis consequatur saepe eligendi voluptatem consequatur dolor consequuntur</p>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">-->
-<!--          <div class="icon-box">-->
-<!--            <div class="icon"><i class="bx bx-arch"></i></div>-->
-<!--            <h4><a href="">Divera don</a></h4>-->
-<!--            <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--      </div>-->
-
-<!--    </div>-->
-<!--  </section>&lt;!&ndash; End Services Section &ndash;&gt;-->
-
-  <!-- ======= Portfolio Section ======= -->
-<!--  <section id="portfolio" class="portfolio">-->
-<!--    <div class="container">-->
-
-<!--      <div class="section-title">-->
-<!--        <h2>Portfolio</h2>-->
-<!--        <p>My Works</p>-->
-<!--      </div>-->
-
-<!--      <div class="row">-->
-<!--        <div class="col-lg-12 d-flex justify-content-center">-->
-<!--          <ul id="portfolio-flters">-->
-<!--            <li data-filter="*" class="filter-active">All</li>-->
-<!--            <li data-filter=".filter-app">App</li>-->
-<!--            <li data-filter=".filter-card">Card</li>-->
-<!--            <li data-filter=".filter-web">Web</li>-->
-<!--          </ul>-->
-<!--        </div>-->
-<!--      </div>-->
-
-<!--      <div class="row portfolio-container">-->
-
-<!--        <div class="col-lg-4 col-md-6 portfolio-item filter-app">-->
-<!--          <div class="portfolio-wrap">-->
-<!--            <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">-->
-<!--            <div class="portfolio-info">-->
-<!--              <h4>App 1</h4>-->
-<!--              <p>App</p>-->
-<!--              <div class="portfolio-links">-->
-<!--                <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>-->
-<!--                <a href="portfolio-details.html" data-gallery="portfolioDetailsGallery" data-glightbox="type: external" class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 portfolio-item filter-web">-->
-<!--          <div class="portfolio-wrap">-->
-<!--            <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">-->
-<!--            <div class="portfolio-info">-->
-<!--              <h4>Web 3</h4>-->
-<!--              <p>Web</p>-->
-<!--              <div class="portfolio-links">-->
-<!--                <a href="assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>-->
-<!--                <a href="portfolio-details.html" data-gallery="portfolioDetailsGallery" data-glightbox="type: external" class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 portfolio-item filter-app">-->
-<!--          <div class="portfolio-wrap">-->
-<!--            <img src="assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">-->
-<!--            <div class="portfolio-info">-->
-<!--              <h4>App 2</h4>-->
-<!--              <p>App</p>-->
-<!--              <div class="portfolio-links">-->
-<!--                <a href="assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 2"><i class="bx bx-plus"></i></a>-->
-<!--                <a href="portfolio-details.html" data-gallery="portfolioDetailsGallery" data-glightbox="type: external" class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 portfolio-item filter-card">-->
-<!--          <div class="portfolio-wrap">-->
-<!--            <img src="assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt="">-->
-<!--            <div class="portfolio-info">-->
-<!--              <h4>Card 2</h4>-->
-<!--              <p>Card</p>-->
-<!--              <div class="portfolio-links">-->
-<!--                <a href="assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 2"><i class="bx bx-plus"></i></a>-->
-<!--                <a href="portfolio-details.html" data-gallery="portfolioDetailsGallery" data-glightbox="type: external" class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 portfolio-item filter-web">-->
-<!--          <div class="portfolio-wrap">-->
-<!--            <img src="assets/img/portfolio/portfolio-5.jpg" class="img-fluid" alt="">-->
-<!--            <div class="portfolio-info">-->
-<!--              <h4>Web 2</h4>-->
-<!--              <p>Web</p>-->
-<!--              <div class="portfolio-links">-->
-<!--                <a href="assets/img/portfolio/portfolio-5.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 2"><i class="bx bx-plus"></i></a>-->
-<!--                <a href="portfolio-details.html" data-gallery="portfolioDetailsGallery" data-glightbox="type: external" class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 portfolio-item filter-app">-->
-<!--          <div class="portfolio-wrap">-->
-<!--            <img src="assets/img/portfolio/portfolio-6.jpg" class="img-fluid" alt="">-->
-<!--            <div class="portfolio-info">-->
-<!--              <h4>App 3</h4>-->
-<!--              <p>App</p>-->
-<!--              <div class="portfolio-links">-->
-<!--                <a href="assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 3"><i class="bx bx-plus"></i></a>-->
-<!--                <a href="portfolio-details.html" data-gallery="portfolioDetailsGallery" data-glightbox="type: external" class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 portfolio-item filter-card">-->
-<!--          <div class="portfolio-wrap">-->
-<!--            <img src="assets/img/portfolio/portfolio-7.jpg" class="img-fluid" alt="">-->
-<!--            <div class="portfolio-info">-->
-<!--              <h4>Card 1</h4>-->
-<!--              <p>Card</p>-->
-<!--              <div class="portfolio-links">-->
-<!--                <a href="assets/img/portfolio/portfolio-7.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 1"><i class="bx bx-plus"></i></a>-->
-<!--                <a href="portfolio-details.html" data-gallery="portfolioDetailsGallery" data-glightbox="type: external" class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 portfolio-item filter-card">-->
-<!--          <div class="portfolio-wrap">-->
-<!--            <img src="assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt="">-->
-<!--            <div class="portfolio-info">-->
-<!--              <h4>Card 3</h4>-->
-<!--              <p>Card</p>-->
-<!--              <div class="portfolio-links">-->
-<!--                <a href="assets/img/portfolio/portfolio-8.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 3"><i class="bx bx-plus"></i></a>-->
-<!--                <a href="portfolio-details.html" data-gallery="portfolioDetailsGallery" data-glightbox="type: external" class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="col-lg-4 col-md-6 portfolio-item filter-web">-->
-<!--          <div class="portfolio-wrap">-->
-<!--            <img src="assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">-->
-<!--            <div class="portfolio-info">-->
-<!--              <h4>Web 3</h4>-->
-<!--              <p>Web</p>-->
-<!--              <div class="portfolio-links">-->
-<!--                <a href="assets/img/portfolio/portfolio-9.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>-->
-<!--                <a href="portfolio-details.html" data-gallery="portfolioDetailsGallery" data-glightbox="type: external" class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--      </div>-->
-
-<!--    </div>-->
-<!--  </section>&lt;!&ndash; End Portfolio Section &ndash;&gt;-->
-
-  <!-- ======= Contact Section ======= -->
-  <section id="contact" class="contact">
-    <div class="container">
-
-      <div class="section-title">
+      <section id="contact" class="reveal">
         <h2>Contact</h2>
-      </div>
-
-      <div class="row mt-2">
-
-        <div class="col-md-6 d-flex align-items-stretch">
-          <div class="info-box">
-            <i class="bx bx-map"></i>
-            <h3>My Address</h3>
-            <p>Long Beach, California</p>
-          </div>
+        <div class="cta">
+          <h3>Let's work together</h3>
+          <p>I'm open to backend and distributed-systems roles. The quickest way to reach me is email.</p>
+          <a class="btn" href="mailto:manu.nagendra@gmail.com">manu.nagendra@gmail.com</a>
         </div>
+        <footer>Designed and built by hand in plain HTML and CSS. No frameworks, no trackers.</footer>
+      </section>
+    </main>
+  </div>
 
-        <div class="col-md-6 mt-4 mt-md-0 d-flex align-items-stretch">
-          <div class="info-box">
-            <i class="bx bx-share-alt"></i>
-            <h3>Linkedin</h3>
-            <div class="social-links">
-              <a href="https://www.linkedin.com/in/manu-nagendra" class="linkedin"><i class="bi bi-linkedin"></i> www.linkedin.com/in/manu-nagendra</a>
-            </div>
-          </div>
-        </div>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      try {
+        var saved = localStorage.getItem("theme");
+        if (saved) root.setAttribute("data-theme", saved);
+      } catch (e) {}
 
-        <div class="col-md-6 mt-4 d-flex align-items-stretch">
-          <div class="info-box">
-            <i class="bx bx-envelope"></i>
-            <h3>Email Me</h3>
-            <p>manu.nagendra@gmail.com</p>
-          </div>
-        </div>
-        <div class="col-md-6 mt-4 d-flex align-items-stretch">
-          <div class="info-box">
-            <i class="bx bx-phone-call"></i>
-            <h3>Call Me</h3>
-            <p>+1 (562)841-3604</p>
-          </div>
-        </div>
-      </div>
+      document.getElementById("theme").addEventListener("click", function () {
+        var dark = getComputedStyle(root).getPropertyValue("--bg").trim() === "#0b1020";
+        var next = dark ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch (e) {}
+      });
 
-    </div>
-  </section><!-- End Contact Section -->
+      var still = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/purecounter/purecounter.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+      var bar = document.getElementById("progress");
+      addEventListener("scroll", function () {
+        var h = document.documentElement.scrollHeight - innerHeight;
+        bar.style.transform = "scaleX(" + (h > 0 ? scrollY / h : 0) + ")";
+      }, { passive: true });
 
+      var counts = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          counts.unobserve(en.target);
+          var el = en.target, to = +el.dataset.to, dec = +el.dataset.dec, pre = el.dataset.pre || "", suf = el.dataset.suf || "";
+          if (still) return;
+          var t0 = performance.now();
+          (function step(t) {
+            var p = Math.min((t - t0) / 1400, 1), e = 1 - Math.pow(1 - p, 3);
+            el.textContent = pre + (to * e).toFixed(dec) + suf;
+            if (p < 1) requestAnimationFrame(step);
+          })(t0);
+        });
+      }, { threshold: 0.6 });
+      document.querySelectorAll("[data-to]").forEach(function (el) { counts.observe(el); });
 
+      document.querySelectorAll(".stat, .skill, .job, .proj").forEach(function (el) {
+        el.addEventListener("pointermove", function (e) {
+          var r = el.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+          el.style.setProperty("--mx", x + "px"); el.style.setProperty("--my", y + "px");
+        });
+      });
 
+      var cards = [].slice.call(document.querySelectorAll(".job, .proj")), clear = document.getElementById("clear"), active = null;
+      function filter(tag) {
+        active = tag === active ? null : tag;
+        document.body.classList.toggle("filtering", !!active);
+        clear.hidden = !active;
+        document.querySelectorAll(".tags li").forEach(function (li) { li.classList.toggle("on", !!active && li.textContent === active); });
+        cards.forEach(function (card) {
+          var hit = !!active && [].some.call(card.querySelectorAll(".tags li"), function (li) { return li.textContent === active; });
+          card.classList.toggle("hit", hit);
+        });
+      }
+      document.querySelectorAll(".tags li").forEach(function (li) {
+        li.tabIndex = 0; li.setAttribute("role", "button");
+        li.addEventListener("click", function () { filter(li.textContent); });
+        li.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); filter(li.textContent); } });
+      });
+      clear.addEventListener("click", function () { filter(active); });
 
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+      var copy = document.getElementById("copy");
+      copy.addEventListener("click", function () {
+        var done = function () {
+          copy.dataset.tip = "copied!"; copy.classList.add("tip");
+          setTimeout(function () { copy.dataset.tip = "copy email"; copy.classList.remove("tip"); }, 1600);
+        };
+        if (navigator.clipboard) navigator.clipboard.writeText(copy.dataset.email).then(done, done);
+        else { window.location.href = "mailto:" + copy.dataset.email; }
+      });
 
+      var links = [].slice.call(document.querySelectorAll("nav a"));
+      var targets = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+      var pinned = null, pinnedAt = 0;
+      function spy() {
+        if (pinned) {
+          links.forEach(function (a) { a.classList.toggle("active", a === pinned); });
+          return;
+        }
+        var current = targets[0];
+        targets.forEach(function (t) { if (t && t.getBoundingClientRect().top <= innerHeight * 0.35) current = t; });
+        links.forEach(function (a) {
+          a.classList.toggle("active", a.getAttribute("href") === "#" + current.id);
+        });
+      }
+      links.forEach(function (a) {
+        a.addEventListener("click", function () { pinned = a; pinnedAt = Date.now(); spy(); });
+      });
+      ["wheel", "touchstart", "keydown"].forEach(function (ev) {
+        addEventListener(ev, function () { if (pinned && Date.now() - pinnedAt > 1200) pinned = null; }, { passive: true });
+      });
+      addEventListener("scroll", spy, { passive: true });
+      addEventListener("resize", spy);
+      spy();
+
+      var reveal = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add("in"); reveal.unobserve(en.target); }
+        });
+      }, { threshold: 0.08 });
+      document.querySelectorAll(".reveal").forEach(function (el) { reveal.observe(el); });
+    })();
+  </script>
 </body>
-
 </html>
