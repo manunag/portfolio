@@ -229,7 +229,7 @@
         <h2>About</h2>
         <p>I'm a backend engineer at Kroger's Customer Platform, working in <strong>Go</strong>, <strong>Kafka</strong> and <strong>YugabyteDB</strong>. For the past two years I've been on the team that moved the platform's customer data off legacy systems, a job that ended with a production run of about <strong>1.22 billion records</strong>.</p>
         <p>Outside the migration I built <strong>CP Krovis</strong>, a tool for exploring Kafka topics that started as a side project and is now used by more than 40 developers. I like work where correctness matters and the scale makes it hard: validation, reconciliation, dead-letter queues and failover.</p>
-        <p>I hold an MS in Computer Science from CSU Long Beach, and I started my career at ZopSmart, where I earned a double promotion to Senior SDE.</p>
+        <p>I hold an MS in Computer Science from CSU Long Beach, and I started my career at ZopSmart, building Kroger's Enterprise Customer.</p>
         <div class="stats">
           <div class="stat"><b data-to="1.22" data-dec="2" data-suf="B">1.22B</b><span>records in the final production migration</span></div>
           <div class="stat"><b data-to="99.99" data-dec="2" data-suf="%">99.99%</b><span>migration accuracy, deltas reconciled to zero</span></div>
@@ -245,7 +245,7 @@
         <article class="job">
           <div class="when">May 2024 &ndash; Present</div>
           <div>
-            <h3>Software Engineer II <small>&middot; Ascendum Solutions (client: Kroger)</small></h3>
+            <h3>Software Engineer II <small>&middot; Kroger (via Ascendum Solutions)</small></h3>
             <ul>
               <li>Core engineer on the Customer Platform migration, from the 24Q2 run through close-out. Owned the validation, error-analysis and fix-script streams for the <b>final run of about 1.22B records across 12 entity types, at 99.99% accuracy</b>.</li>
               <li>Designed a reusable <b>Go data-fix framework</b> that replaced one-off scripts, and built a Go generator of synthetic records that caught <b>15+ critical transformation bugs</b> before production.</li>
@@ -258,12 +258,26 @@
         </article>
 
         <article class="job">
+          <div class="when">Aug 2023 &ndash; May 2024</div>
+          <div>
+            <h3>Instructional Assistant <small>&middot; California State University, Long Beach</small></h3>
+            <ul>
+              <li>Assisted the professor in running an algorithms course of <b>100+ students</b>, holding open office hours for support and collaboration on course material.</li>
+              <li>Developed <b>auto-grading tools</b> for fair evaluation of student algorithms, and contributed ideas that improved assignments and the course experience.</li>
+            </ul>
+            <ul class="tags"><li>Algorithms</li><li>Teaching</li><li>Automation</li></ul>
+          </div>
+        </article>
+
+        <article class="job">
           <div class="when">Apr 2022 &ndash; Dec 2022</div>
           <div>
-            <h3>Senior Software Development Engineer <small>&middot; ZopSmart</small></h3>
+            <h3>Senior Software Development Engineer <small>&middot; Kroger (via ZopSmart)</small></h3>
             <ul>
               <li>Led a 10-member team replacing a legacy enterprise customer data system, raising migration efficiency by <b>50%</b>.</li>
-              <li>Promoted from SDE I to Senior SDE in a double promotion after two years, and mentored junior developers on Go.</li>
+              <li>Engineered an application that transformed and loaded over <b>450 million records</b> from legacy to modern systems, and automated migration procedures with a custom script.</li>
+              <li>Architected and maintained a Kafka, Go and YugabyteDB data synchronization application between legacy and modern systems.</li>
+              <li>Promoted from SDE I to Senior SDE in a double promotion after two years.</li>
             </ul>
             <ul class="tags"><li>Go</li><li>Kafka</li><li>Team lead</li></ul>
           </div>
@@ -272,12 +286,12 @@
         <article class="job">
           <div class="when">Mar 2020 &ndash; Mar 2022</div>
           <div>
-            <h3>Software Development Engineer I <small>&middot; ZopSmart</small></h3>
+            <h3>Software Development Engineer I <small>&middot; Kroger (via ZopSmart)</small></h3>
             <ul>
               <li>Led an ETL-based migration project from inception to deployment; centralizing customer data saved an estimated <b>$2.3M a year</b>.</li>
-              <li>Raised real-time pipeline throughput by <b>60%</b> with goroutines and channels, and cut server load by <b>25%</b> with a Redis cache.</li>
+              <li>Centralized PII data, avoiding CCPA penalties of up to <b>$7,500 per incident</b>, and built projects from scratch with proofs of concept, CI/CD and unit and integration tests.</li>
             </ul>
-            <ul class="tags"><li>Go</li><li>Redis</li><li>ETL</li><li>CI/CD</li></ul>
+            <ul class="tags"><li>Go</li><li>ETL</li><li>CI/CD</li></ul>
           </div>
         </article>
 
@@ -299,34 +313,34 @@
         <h2>Case study</h2>
         <article class="case">
           <p class="kicker">Data migration &middot; validation</p>
-          <h3>Turning about 200K unexplained mismatches into fix-ready categories</h3>
+          <h3>Explaining about 211K migration mismatches by matching them to error logs</h3>
           <h4>The problem</h4>
-          <p>After a production migration run, a reconciliation between the new platform and the legacy source flagged about <b>200K records</b> that disagreed. A flat list of that size can't be worked: nobody knew which differences shared a cause, who owned them, or which were safe to fix automatically.</p>
+          <p>After a production migration run, a comparison of the legacy source against the migrated data flagged about <b>211K records</b> where a card and a digital ID disagreed. A flat list that size can't be worked. Nobody knew which differences were migration bugs, which came from bad source data, and which needed a fix at all.</p>
           <h4>Approach</h4>
           <ul>
-            <li>Pulled the same records from <b>three source systems</b> through small, separate fetchers, so every comparison used one record shape.</li>
-            <li>Built an analyzer that grouped each mismatch by cause, which gave a <b>14-category taxonomy</b>. Each category got a named owner and a decision: fix in data, fix in the transform, or accept.</li>
-            <li>Applied the fixable categories with an executor CLI that sends <b>JSON Merge Patch</b> updates, so each fix changes only the fields that were wrong.</li>
-            <li>Replaced one-off scripts with this reusable framework, and re-ran the analyzer after each fix to prove the category shrank.</li>
+            <li>Grouped the mismatches by the combination of card, email and email ID that differed, so identical patterns were counted together.</li>
+            <li>Matched each group against the <b>migration's own pre-processing error logs</b>. If the same IDs had already been logged as errors, the cause was known.</li>
+            <li>Checked the gaps: for each group, reconciled the difference in counts and <b>sampled records by hand</b> to confirm the explanation held.</li>
+            <li>Wrote a <b>fix proposal for each category</b>, such as "fix in the source system" or "the source has to create the missing data", so each had a clear next step.</li>
           </ul>
-          <svg class="flow" viewBox="0 0 760 120" role="img" aria-label="Pipeline: three source systems feed fetchers, then an analyzer that produces categories, then an executor that applies patches, then a re-run check.">
+          <svg class="flow" viewBox="0 0 760 120" role="img" aria-label="Process: source and target mismatch lists are grouped by pattern, matched to pre-processing error logs, sampled and verified, then turned into a fix proposal per category.">
             <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z"/></marker></defs>
-            <g><rect x="4" y="30" width="110" height="60" rx="10"/><text x="59" y="57">3 source systems</text><text class="sub" x="59" y="75">legacy + new</text></g>
+            <g><rect x="4" y="30" width="110" height="60" rx="10"/><text x="59" y="57">Source vs target</text><text class="sub" x="59" y="75">mismatch lists</text></g>
             <path d="M114 60H146"/>
-            <g><rect x="148" y="30" width="110" height="60" rx="10"/><text x="203" y="57">Fetchers</text><text class="sub" x="203" y="75">one record shape</text></g>
+            <g><rect x="148" y="30" width="110" height="60" rx="10"/><text x="203" y="57">Group</text><text class="sub" x="203" y="75">by pattern</text></g>
             <path d="M258 60H290"/>
-            <g class="hl"><rect x="292" y="30" width="110" height="60" rx="10"/><text x="347" y="57">Analyzer</text><text class="sub" x="347" y="75">group by cause</text></g>
+            <g class="hl"><rect x="292" y="30" width="110" height="60" rx="10"/><text x="347" y="57">Match to logs</text><text class="sub" x="347" y="75">pre-processing errors</text></g>
             <path d="M402 60H434"/>
-            <g class="hl"><rect x="436" y="30" width="110" height="60" rx="10"/><text x="491" y="57">14 categories</text><text class="sub" x="491" y="75">owner + decision</text></g>
+            <g class="hl"><rect x="436" y="30" width="110" height="60" rx="10"/><text x="491" y="57">Sample + verify</text><text class="sub" x="491" y="75">reconcile counts</text></g>
             <path d="M546 60H578"/>
-            <g><rect x="580" y="30" width="110" height="60" rx="10"/><text x="635" y="57">Executor</text><text class="sub" x="635" y="75">JSON Merge Patch</text></g>
+            <g><rect x="580" y="30" width="110" height="60" rx="10"/><text x="635" y="57">Fix proposal</text><text class="sub" x="635" y="75">per category</text></g>
             <path d="M635 90V110H347V94" />
           </svg>
-          <p class="caption">After each fix the analyzer runs again, so progress is measured by categories that shrink.</p>
+          <p class="caption">Each step narrowed the open question until every group had an explanation and a proposed owner of the fix.</p>
           <h4>Result</h4>
-          <p>The open-ended reconciliation became a short, owned list, and the same framework repaired mismatches in production. The final run of about <b>1.22 billion records</b> closed at <b>99.99% accuracy</b>, with every remaining difference on groups and alternate IDs reconciled to zero.</p>
+          <p>Of about 211K mismatched card and digital IDs, <b>99.98%</b> matched a logged pre-processing error, so almost every difference had a documented cause. Samples traced most of it to <b>bad data in the source system</b>, not to the migration. The open-ended mismatch became a short set of categories, each with a fix proposal, and the final production run of about <b>1.22 billion records</b> closed at <b>99.99% accuracy</b>.</p>
           <h4>What I'd do differently</h4>
-          <p>Categorize earlier. The taxonomy came after the reconciliation had already produced a flat list, and building the analyzer first would have saved manual triage. <a href="https://github.com/manunag/recon" rel="noopener" style="border-bottom:1px solid var(--accent)">recon</a> is a small public version of that idea.</p>
+          <p>Match against the error logs earlier. The explanation was sitting in the logs already, and comparing them before the first reconciliation would have cut the manual sampling. <a href="https://github.com/manunag/recon" rel="noopener" style="border-bottom:1px solid var(--accent)">recon</a> is a small public version of the grouping idea.</p>
         </article>
       </section>
 
@@ -346,7 +360,7 @@
           <div class="when">2026</div>
           <div>
             <h3>CP Krovis: a Kafka explorer for the whole team</h3>
-            <p>Started as a personal project and became a production app used by <b>40+ developers across 3 to 4 teams</b> to browse, search, stream and publish Kafka messages without CLI access. It also appears in the disaster recovery runbooks for finding offsets by timestamp during failover. <i>Internal to Kroger, so the source isn't public.</i></p>
+            <p>Started as a personal project and became a production app used by <b>40+ developers across 4 teams</b> to browse, search, stream and publish Kafka messages without CLI access. It also appears in the disaster recovery runbooks for finding offsets by timestamp during failover. <i>Internal to Kroger, so the source isn't public.</i></p>
             <p>12 Kafka environments behind one interface, Avro schema-registry decoding, multi-partition time-range search, live WebSocket streaming and JSON diff. LDAP and JWT auth, 180 automated tests.</p>
             <a class="shot" href="assets/img/krovis.png" target="_blank" rel="noopener">
               <img src="assets/img/krovis.jpg" width="1600" height="953" loading="lazy" alt="CP Krovis explorer in the Stage environment: a topic list on the left, a search and time-range bar on top, and an expanded Kafka message shown as a JSON tree.">
@@ -391,7 +405,7 @@
       <section id="education" class="reveal">
         <h2>Education</h2>
         <div class="edu">
-          <div><h3>MS in Computer Science</h3><p>California State University, Long Beach &middot; 2023 &ndash; 2025</p></div>
+          <div><h3>MS in Computer Science</h3><p>California State University, Long Beach &middot; 2023 &ndash; 2024</p></div>
           <div><h3>BE in Computer Science</h3><p>Saveetha School of Engineering &middot; 2015 &ndash; 2019</p></div>
           <div><h3>Claude Code in Action</h3><p>Anthropic certification &middot; February 2026 &middot; <a href="https://verify.skilljar.com/c/nfpjfjyaymza" rel="noopener" style="border-bottom:1px solid var(--accent)">verify</a></p></div>
         </div>
