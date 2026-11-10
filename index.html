@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Manu Nagendra Nalla | Backend Software Engineer</title>
-  <meta name="description" content="Backend software engineer building Go services, Kafka event pipelines and large-scale data migrations. Creator of CP Krovis, a Kafka tool used by 40+ developers.">
+  <meta name="description" content="Backend software engineer building Go (Golang) services, Kafka event pipelines, distributed systems and large-scale data migrations. Creator of CP Krovis, a Kafka tool used by 40+ developers.">
   <meta name="theme-color" content="#0b1020">
   <meta property="og:title" content="Manu Nagendra Nalla | Backend Software Engineer">
-  <meta property="og:description" content="Go, Kafka and large-scale data migrations.">
+  <meta property="og:description" content="Go (Golang), Kafka, distributed systems and large-scale data migrations.">
   <meta property="og:type" content="website">
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -249,12 +249,14 @@
             <ul>
               <li>Core engineer on the Customer Platform migration, from the 24Q2 run through close-out. Owned the validation, error-analysis and fix-script streams for the <b>final run of about 1.22B records across 12 entity types, at 99.99% accuracy</b>.</li>
               <li>Designed a reusable <b>Go data-fix framework</b> that replaced one-off scripts, and built a Go generator of synthetic records that caught <b>15+ critical transformation bugs</b> before production.</li>
+              <li>Cut the time to find mismatches between source and migrated systems by about <b>80%</b> (a day with awk scripts to 1 to 2 hours), using Parquet extracts and <b>DuckDB</b> SQL scripts.</li>
               <li>Built a Failed Events API for about 915K DLQ messages a month, and an error-handling package that cut debugging time by about <b>73%</b> (2.5 hours to 40 minutes).</li>
               <li>Tuned forward-sync consumption by load-testing worker counts against CPU, raising throughput from <b>4K to 14K events per minute (3.5x)</b>.</li>
-              <li>Worked on the Phalcons <b>microservices</b> (Accounts, Groups, Search, Entities History, Orchestrator and Shim) in an <b>event-driven, event-sourced</b> architecture on Kafka, with <b>OAuth</b>-based authentication.</li>
+              <li>Wrote code for the Kafka <b>sync services</b> that handle <b>60.6M</b> production requests a month at a <b>0.0012%</b> error rate and 7.8 ms p95, feeding Customer Platform back ends that serve <b>28.6 billion</b> calls a month.</li>
+              <li>Worked on the Phalcons <b>microservices</b> (Accounts, Groups, Search, Entities History, Orchestrator and Shim), organized around business domains (<b>domain-driven design</b>), in an <b>event-driven, event-sourced</b> architecture on Kafka, with <b>OAuth</b>-based authentication.</li>
               <li>Built disaster recovery for eight Kafka consumers, and validated CP Search at about <b>2,995 GET requests per second (9.94 ms p95)</b> against a 150 ms SLA.</li>
             </ul>
-            <ul class="tags"><li>Go</li><li>Kafka</li><li>YugabyteDB</li><li>Kubernetes</li><li>Dynatrace</li><li>Harness</li></ul>
+            <ul class="tags"><li>Go (Golang)</li><li>Python</li><li>Java</li><li>Bash</li><li>SQL</li><li>Kafka</li><li>Dead letter queues</li><li>Microservices</li><li>DDD</li><li>Event sourcing</li><li>OAuth</li><li>OpenAPI</li><li>YugabyteDB</li><li>Redis</li><li>DuckDB</li><li>Parquet</li><li>Kubernetes</li><li>Rancher</li><li>Dynatrace</li><li>Grafana</li><li>Harness</li></ul>
           </div>
         </article>
 
@@ -280,7 +282,7 @@
               <li>Architected and maintained a Kafka, Go and YugabyteDB data synchronization application between legacy and modern systems.</li>
               <li>Promoted from SDE I to Senior SDE in a double promotion after two years.</li>
             </ul>
-            <ul class="tags"><li>Go</li><li>Kafka</li><li>Team lead</li></ul>
+            <ul class="tags"><li>Go (Golang)</li><li>Kafka</li><li>Team lead</li></ul>
           </div>
         </article>
 
@@ -292,7 +294,7 @@
               <li>Led an ETL-based migration project from inception to deployment; centralizing customer data saved an estimated <b>$2.3M a year</b>.</li>
               <li>Centralized PII data, avoiding CCPA penalties of up to <b>$7,500 per incident</b>, and built projects from scratch with proofs of concept, CI/CD and unit and integration tests.</li>
             </ul>
-            <ul class="tags"><li>Go</li><li>ETL</li><li>CI/CD</li></ul>
+            <ul class="tags"><li>Go (Golang)</li><li>ETL</li><li>CI/CD</li><li>Spinnaker</li><li>MongoDB</li></ul>
           </div>
         </article>
 
@@ -353,7 +355,7 @@
           <div>
             <h3><a href="https://github.com/manunag/recon" rel="noopener">recon: reconcile two datasets into fixable categories</a></h3>
             <p>A small open-source Go CLI that compares two JSONL datasets and groups every difference by cause, with sample IDs, JSON output and CI-friendly exit codes. Standard library only, with tests. Run on 2,000 synthetic records, it turns 179 differing records into five categories.</p>
-            <ul class="tags"><li>Go</li><li>CLI</li><li>Testing</li><li>Data validation</li></ul>
+            <ul class="tags"><li>Go (Golang)</li><li>CLI</li><li>Testing</li><li>Data validation</li></ul>
           </div>
         </article>
 
@@ -367,7 +369,7 @@
               <img src="assets/img/krovis.jpg" width="1600" height="953" loading="lazy" alt="CP Krovis explorer in the Stage environment: a topic list on the left, a search and time-range bar on top, and an expanded Kafka message shown as a JSON tree.">
             </a>
             <p class="caption">The CP Krovis explorer on a Stage environment. Click the image to see it full size.</p>
-            <ul class="tags"><li>Go</li><li>React</li><li>TypeScript</li><li>Kafka</li><li>WebSockets</li><li>GitHub Actions</li></ul>
+            <ul class="tags"><li>Go (Golang)</li><li>React</li><li>TypeScript</li><li>JavaScript</li><li>Kafka</li><li>Avro</li><li>Schema Registry</li><li>REST</li><li>WebSockets</li><li>Vite</li><li>Vitest</li><li>Docker</li><li>Azure</li><li>GitHub Actions</li></ul>
           </div>
         </article>
 
@@ -376,7 +378,7 @@
           <div>
             <h3>Data Loader</h3>
             <p>A Go application that loads data between databases with configurable filters and transformations. Supports CSV, JSON, SQL, Postgres, Cassandra and Kafka.</p>
-            <ul class="tags"><li>Go</li><li>Postgres</li><li>Cassandra</li><li>Kafka</li></ul>
+            <ul class="tags"><li>Go (Golang)</li><li>PostgreSQL</li><li>Cassandra</li><li>Kafka</li></ul>
           </div>
         </article>
 
@@ -395,10 +397,10 @@
       <section id="skills" class="reveal">
         <h2>Skills</h2>
         <div class="skill-grid">
-          <div class="skill"><h3>Languages</h3><ul class="tags"><li>Go</li><li>Python</li><li>TypeScript</li><li>JavaScript</li><li>SQL</li><li>Java</li><li>Bash</li></ul></div>
+          <div class="skill"><h3>Languages</h3><ul class="tags"><li>Go (Golang)</li><li>Python</li><li>TypeScript</li><li>JavaScript</li><li>SQL</li><li>Java</li><li>Bash</li></ul></div>
           <div class="skill"><h3>Backend and messaging</h3><ul class="tags"><li>Kafka</li><li>Avro</li><li>Schema Registry</li><li>REST</li><li>OpenAPI</li><li>WebSockets</li><li>Event sourcing</li><li>Microservices</li><li>DDD</li><li>OAuth</li><li>Dead letter queues</li></ul></div>
-          <div class="skill"><h3>Databases</h3><ul class="tags"><li>YugabyteDB</li><li>PostgreSQL</li><li>Redis</li><li>MongoDB</li><li>Cassandra</li><li>PL/SQL</li></ul></div>
-          <div class="skill"><h3>Cloud and DevOps</h3><ul class="tags"><li>Kubernetes</li><li>Docker</li><li>Rancher</li><li>Harness</li><li>Spinnaker</li><li>GitHub Actions</li><li>Azure</li><li>AWS</li></ul></div>
+          <div class="skill"><h3>Databases</h3><ul class="tags"><li>YugabyteDB</li><li>PostgreSQL</li><li>Redis</li><li>MongoDB</li><li>Cassandra</li><li>DuckDB</li><li>Parquet</li><li>PL/SQL</li></ul></div>
+          <div class="skill"><h3>Cloud and DevOps</h3><ul class="tags"><li>Kubernetes</li><li>Docker</li><li>Rancher</li><li>Harness</li><li>Spinnaker</li><li>GitHub Actions</li><li>CI/CD</li><li>Azure</li></ul></div>
           <div class="skill"><h3>Observability and frontend</h3><ul class="tags"><li>Dynatrace</li><li>Grafana</li><li>React</li><li>Vite</li><li>Vitest</li></ul></div>
         </div>
       </section>
